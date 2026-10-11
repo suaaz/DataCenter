@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataCenterCore | Mission-Critical Facilities, High-Speed Fabrics & Certification Roadmap</title>
+  <meta name="description" content="Personal mission-critical data center architecture website by Abdul-Azeez Sulaimon: power paths, cooling thermodynamics, Spine-Leaf Clos, VXLAN EVPN, RoCEv2 AI clusters, and certification roadmap from beginner to expert.">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Custom Data Center Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfeff',
+              100: '#cffafe',
+              400: '#22d3ee',
+              500: '#06b6d4',
+              600: '#0891b2',
+              700: '#0e7490',
+              900: '#164e63',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="dc-grid-bg text-slate-100 font-sans min-h-screen antialiased flex flex-col">
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <div class="w-9 h-9 rounded-lg bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400 group-hover:scale-105 group-hover:border-cyan-400 transition shadow-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+        </div>
+        <div>
+          <span class="text-base font-extrabold tracking-tight text-white flex items-center gap-1.5">
+            DataCenterCore <span class="text-cyan-400">.io</span>
+          </span>
+          <span class="text-[10px] text-slate-400 block -mt-1 font-mono">Facilities • Fabrics • Cert Roadmap</span>
+        </div>
+      </a>
+
+      <!-- Search Input -->
+      <div class="hidden md:flex items-center flex-1 max-w-md mx-4">
+        <div class="relative w-full">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+            🔍
+          </span>
+          <input 
+            type="text" 
+            id="global-search-input" 
+            placeholder="Search topics & certs (e.g. Spine-Leaf, PUE, CCIE, Tier IV)..." 
+            class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl pl-9 pr-12 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition"
+          >
+          <kbd class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-[10px] text-slate-500 font-mono">
+            /
+          </kbd>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-1 sm:gap-2 lg:gap-2.5 text-xs font-medium">
+        <!-- Roadmap link highlighted with special badge -->
+        <a href="#roadmap-section" class="px-2.5 py-1.5 rounded-lg bg-cyan-950/80 text-cyan-300 border border-cyan-800/80 hover:bg-cyan-900 transition flex items-center gap-1 font-semibold">
+          <span>🎓</span> Cert Roadmap
+        </a>
+        <a href="#daily-section" class="px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+          Daily Spotlight
+        </a>
+        <a href="#facilities-section" class="px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+          Facilities
+        </a>
+        <a href="#network-section" class="px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+          Fabric &amp; VXLAN
+        </a>
+        <a href="#interactive-tools" class="px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+          Simulators
+        </a>
+        <a href="#about-section" class="px-2.5 py-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 transition">
+          About
+        </a>
+
+        <!-- Cross-Links to Sister Platforms -->
+        <a href="https://suaaz.github.io/CCNA/" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded-lg bg-sky-950/70 text-sky-300 border border-sky-800/60 hover:bg-sky-900 transition flex items-center gap-1 text-[11px]" title="Visit CCNA Engineering Hub">
+          <span>🌐</span> CCNA
+        </a>
+        <a href="https://suaaz.github.io/Cloud/" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded-lg bg-purple-950/70 text-purple-300 border border-purple-800/60 hover:bg-purple-900 transition flex items-center gap-1 text-[11px]" title="Visit Cloud Architecture Hub">
+          <span>☁️</span> Cloud
+        </a>
+        <a href="https://suaaz.github.io/DevOps/" target="_blank" rel="noopener noreferrer" class="px-2 py-1 rounded-lg bg-blue-950/70 text-blue-300 border border-blue-800/60 hover:bg-blue-900 transition flex items-center gap-1 text-[11px]" title="Visit DevOps Mastery Hub">
+          <span>🚀</span> DevOps
+        </a>
+
+        <!-- Bookmarks Count -->
+        <span class="flex items-center gap-1 text-[11px] bg-slate-900 px-2 py-1 rounded-md border border-slate-800 text-amber-300" title="Saved Topics">
+          ⭐ <span id="bookmark-count-badge">0</span>
+        </span>
+
+        <!-- GitHub Repo Link -->
+        <a href="https://github.com/suaaz/Data-center" target="_blank" rel="noopener noreferrer" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition" title="View on GitHub">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+        </a>
+      </nav>
+
+      <!-- Mobile Right Controls (Hamburger & Bookmarks) -->
+      <div class="flex items-center gap-2 md:hidden">
+        <span class="flex items-center gap-1 text-[11px] bg-slate-900 px-2 py-1 rounded-md border border-slate-800 text-amber-300">
+          ⭐ <span id="mobile-bookmark-count-badge">0</span>
+        </span>
+        <button id="mobile-menu-toggle-btn" class="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white focus:outline-none" aria-label="Toggle Navigation Menu">
+          <svg id="hamburger-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg id="close-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-drawer" class="hidden md:hidden border-t border-slate-800 bg-slate-950/95 backdrop-blur-xl px-4 py-4 space-y-3 mobile-drawer-enter">
+      <!-- Mobile Search Bar -->
+      <div class="relative w-full">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">🔍</span>
+        <input 
+          type="text" 
+          id="mobile-search-input" 
+          placeholder="Search topics (e.g. Spine-Leaf, PUE, CCIE)..." 
+          class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500"
+        >
+      </div>
+
+      <!-- Mobile Nav Links -->
+      <nav class="flex flex-col space-y-1 text-sm font-medium pt-1">
+        <a href="#roadmap-section" class="mobile-nav-link px-3 py-2 rounded-lg text-cyan-300 bg-cyan-950/50 border border-cyan-800/50 transition flex items-center justify-between font-bold">
+          <span>🎓 Certification Roadmap (Beginner &rarr; Expert)</span>
+          <span class="text-xs text-cyan-400 font-mono">Featured</span>
+        </a>
+        <a href="#daily-section" class="mobile-nav-link px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-900 transition flex items-center justify-between">
+          <span>✨ Today's Concept Spotlight</span>
+          <span class="text-xs text-cyan-400 font-mono">Daily</span>
+        </a>
+        <a href="#facilities-section" class="mobile-nav-link px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-900 transition flex items-center justify-between">
+          <span>🏢 Physical Facilities &amp; Tiers</span>
+          <span class="text-xs text-amber-400">Power &amp; Cooling</span>
+        </a>
+        <a href="#network-section" class="mobile-nav-link px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-900 transition flex items-center justify-between">
+          <span>⚡ Spine-Leaf &amp; VXLAN EVPN</span>
+          <span class="text-xs text-cyan-400">Fabric</span>
+        </a>
+        <a href="#interactive-tools" class="mobile-nav-link px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-900 transition flex items-center justify-between">
+          <span>🔬 Interactive Calculators &amp; Labs</span>
+          <span class="text-xs text-emerald-400">Hands-on</span>
+        </a>
+        <a href="#about-section" class="mobile-nav-link px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-900 transition flex items-center justify-between">
+          <span>👨‍💻 About Abdul-Azeez</span>
+          <span class="text-xs text-slate-500">Portfolio</span>
+        </a>
+        
+        <!-- Sister Platforms -->
+        <a href="https://suaaz.github.io/CCNA/" target="_blank" class="mobile-nav-link px-3 py-2 rounded-lg text-sky-300 bg-sky-950/40 border border-sky-800/40 hover:bg-sky-900/40 transition flex items-center justify-between">
+          <span>🌐 Sister Hub: NetEngineer (CCNA/ENCOR)</span>
+          <span class="text-xs">&rarr;</span>
+        </a>
+        <a href="https://suaaz.github.io/Cloud/" target="_blank" class="mobile-nav-link px-3 py-2 rounded-lg text-purple-300 bg-purple-950/40 border border-purple-800/40 hover:bg-purple-900/40 transition flex items-center justify-between">
+          <span>☁️ Sister Hub: CloudArchitect</span>
+          <span class="text-xs">&rarr;</span>
+        </a>
+        <a href="https://suaaz.github.io/DevOps/" target="_blank" class="mobile-nav-link px-3 py-2 rounded-lg text-blue-300 bg-blue-950/40 border border-blue-800/40 hover:bg-blue-900/40 transition flex items-center justify-between">
+          <span>🚀 Sister Hub: DevOpsMastery</span>
+          <span class="text-xs">&rarr;</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-20">
+
+    <!-- HERO SECTION -->
+    <section class="text-center py-8 sm:py-12 max-w-4xl mx-auto">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 mb-4 animate-bounce">
+        <span class="w-2 h-2 rounded-full bg-cyan-400 led-active"></span>
+        <span>Mission-Critical Data Center Engineering &amp; High-Density Architecture</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
+        Mastering Data Centers: <br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">
+          From Megawatt Power to 800G Fabrics
+        </span>
+      </h1>
+      <p class="mt-4 text-sm sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
+        Everything you need to know about physical infrastructure (Uptime Tiers, 2N power paths, liquid cooling, ANSI/TIA-942) and high-speed fabrics (Clos Spine-Leaf, VXLAN EVPN, RoCEv2 AI clusters), with an interactive beginner-to-expert certification roadmap.
+      </p>
+
+      <!-- Quick Action CTA Buttons -->
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <a href="#roadmap-section" class="px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm shadow-lg shadow-cyan-500/30 transition flex items-center gap-2">
+          <span>🎓</span> Cert Roadmap (Beginner &rarr; Expert)
+        </a>
+        <a href="#daily-section" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm border border-slate-700 transition flex items-center gap-2">
+          <span>✨</span> Daily Spotlight
+        </a>
+        <a href="#interactive-tools" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-emerald-300 font-semibold text-sm border border-emerald-900/60 transition flex items-center gap-2">
+          <span>🔬</span> Interactive Calculators
+        </a>
+        <a href="#facilities-section" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-300 font-semibold text-sm border border-amber-900/60 transition">
+          Physical Facilities
+        </a>
+        <a href="#network-section" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 font-semibold text-sm border border-cyan-900/60 transition">
+          Network Fabrics
+        </a>
+      </div>
+
+      <!-- Quick Architectural Metrics Highlights -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-10 text-left">
+        <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800">
+          <span class="text-[10px] text-slate-500 uppercase font-mono block">Uptime Availability</span>
+          <span class="text-base font-bold text-emerald-400 font-mono">99.995% (Tier IV)</span>
+          <span class="text-[10px] text-slate-400 block mt-0.5">Fault-tolerant 2N plants</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800">
+          <span class="text-[10px] text-slate-500 uppercase font-mono block">Power Usage (PUE)</span>
+          <span class="text-base font-bold text-cyan-400 font-mono">1.10 - 1.25</span>
+          <span class="text-[10px] text-slate-400 block mt-0.5">Direct-to-Chip liquid cooling</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800">
+          <span class="text-[10px] text-slate-500 uppercase font-mono block">Fabric Scalability</span>
+          <span class="text-base font-bold text-cyan-300 font-mono">16.7M Segments</span>
+          <span class="text-[10px] text-slate-400 block mt-0.5">24-bit VXLAN VNIs &amp; EVPN</span>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800">
+          <span class="text-[10px] text-slate-500 uppercase font-mono block">AI Compute Density</span>
+          <span class="text-base font-bold text-amber-400 font-mono">40kW - 100kW+</span>
+          <span class="text-[10px] text-slate-400 block mt-0.5">Per-rack GPU SuperPODs</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         ADDITIONAL FEATURE: CERTIFICATION ROADMAP (BEGINNER TO EXPERT)
+         ========================================================================= -->
+    <section id="roadmap-section" class="space-y-6">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-4 border-b border-slate-800">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded text-xs font-bold bg-cyan-950 text-cyan-300 border border-cyan-800">
+              Interactive Career Ladder
+            </span>
+            <span class="text-xs text-slate-400 font-mono">From Beginner to CCIE / CDCE / VCDX</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">
+            Data Center Certification Roadmap &amp; Progress Tracker
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl">
+            A comprehensive, multi-track guide through industry-recognized certifications across Facilities Design, High-Speed Fabrics, and Systems/Storage. Mark your progress and track your journey to Fellow Architect.
+          </p>
+        </div>
+
+        <!-- Career Progress Meter Card -->
+        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 min-w-[280px] space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="text-slate-400 font-medium">My Career Milestone:</span>
+            <span id="roadmap-progress-percent" class="font-mono font-bold text-cyan-400">0% Completed</span>
+          </div>
+          <!-- Progress Bar -->
+          <div class="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+            <div id="roadmap-progress-bar" class="h-full bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all duration-500" style="width: 0%;"></div>
+          </div>
+          <!-- Stats breakdown -->
+          <div class="flex justify-between text-[11px] font-mono text-slate-400 pt-1">
+            <span>✅ <strong id="roadmap-stat-completed" class="text-emerald-400">0</strong> Done</span>
+            <span>⏳ <strong id="roadmap-stat-inprogress" class="text-amber-400">0</strong> Active</span>
+            <span>🎯 <strong id="roadmap-stat-target" class="text-blue-400">0</strong> Target</span>
+            <span>Total: <strong id="roadmap-stat-total" class="text-white">14</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Roadmap Filter Controls -->
+      <div class="space-y-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
+        <!-- Track Filters -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Filter by Track:</span>
+          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar touch-scroll pb-1 sm:pb-0">
+            <button onclick="RoadmapEngine.filterTrack('all')" class="roadmap-track-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500 text-slate-950 transition" data-track="all">
+              All Tracks
+            </button>
+            <button onclick="RoadmapEngine.filterTrack('facilities')" class="roadmap-track-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition" data-track="facilities">
+              ⚡ Facilities &amp; Physical Infrastructure
+            </button>
+            <button onclick="RoadmapEngine.filterTrack('networking')" class="roadmap-track-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition" data-track="networking">
+              🌐 Network &amp; High-Speed Fabric
+            </button>
+            <button onclick="RoadmapEngine.filterTrack('systems')" class="roadmap-track-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition" data-track="systems">
+              ☁️ Systems &amp; Virtualization/Storage
+            </button>
+          </div>
+        </div>
+
+        <!-- Level Filters -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Filter by Level:</span>
+          <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar touch-scroll">
+            <button onclick="RoadmapEngine.filterLevel('all')" class="roadmap-level-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500 text-slate-950 transition" data-level="all">
+              All Levels
+            </button>
+            <button onclick="RoadmapEngine.filterLevel('beginner')" class="roadmap-level-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition" data-level="beginner">
+              Level 1: Beginner
+            </button>
+            <button onclick="RoadmapEngine.filterLevel('intermediate')" class="roadmap-level-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition" data-level="intermediate">
+              Level 2: Intermediate
+            </button>
+            <button onclick="RoadmapEngine.filterLevel('advanced')" class="roadmap-level-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition" data-level="advanced">
+              Level 3: Advanced
+            </button>
+            <button onclick="RoadmapEngine.filterLevel('expert')" class="roadmap-level-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition" data-level="expert">
+              Level 4: Expert / Master
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Roadmap Cards Container (Populated by RoadmapEngine) -->
+      <div id="roadmap-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </section>
+
+    <!-- ================= DAILY SPOTLIGHT SECTION ================= -->
+    <section id="daily-section" class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="text-xs uppercase tracking-wider font-bold text-cyan-400">Daily Curriculum</span>
+          <h2 class="text-2xl font-bold text-white">Daily Concept Spotlight &amp; Architecture Challenge</h2>
+        </div>
+        <span class="text-xs text-slate-400 hidden sm:inline-block">Rotates automatically every 24 hours 🕒</span>
+      </div>
+
+      <!-- Container dynamically populated by js/app.js -->
+      <div id="daily-spotlight-card"></div>
+    </section>
+
+    <!-- ================= INTERACTIVE SIMULATORS SECTION ================= -->
+    <section id="interactive-tools" class="space-y-6">
+      <div>
+        <span class="text-xs uppercase tracking-wider font-bold text-emerald-400">Hands-on Engineering Lab</span>
+        <h2 class="text-2xl font-bold text-white">Interactive Data Center Simulators &amp; Sizing Tools</h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1">Calculate real-world Power Usage Effectiveness (PUE), dimension Spine-Leaf oversubscription ratios, and test Uptime Institute failure resiliency live.</p>
+      </div>
+
+      <div class="space-y-6">
+        <!-- Simulator 1: PUE & Carbon Calculator -->
+        <div id="pue-calculator-container"></div>
+
+        <!-- Simulator 2: Spine-Leaf Oversubscription Analyzer -->
+        <div id="spineleaf-calculator-container"></div>
+
+        <!-- Simulator 3: Uptime Tier Resiliency & Live Fault Simulator -->
+        <div id="tier-simulator-container"></div>
+      </div>
+    </section>
+
+    <!-- ================= PHYSICAL FACILITIES & TIERS SECTION ================= -->
+    <section id="facilities-section" class="space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded text-xs font-bold badge-dc-facilities">Mission-Critical Facilities</span>
+            <span class="text-xs text-slate-400 font-mono">Uptime Institute &bull; TIA-942 &bull; ASHRAE</span>
+          </div>
+          <h2 class="text-2xl font-bold text-white mt-1">Data Center Facilities &amp; Physical Infrastructure</h2>
+        </div>
+
+        <!-- Domain Filters -->
+        <div class="flex items-center gap-1.5 text-xs overflow-x-auto no-scrollbar touch-scroll pb-1 sm:pb-0 sm:flex-wrap w-full sm:w-auto -mx-1 px-1">
+          <button onclick="App.filterFacilitiesDomain('all')" class="facilities-filter-btn px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-semibold whitespace-nowrap flex-shrink-0 transition" data-domain="all">
+            All
+          </button>
+          <button onclick="App.filterFacilitiesDomain('Standards & Tiers')" class="facilities-filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap flex-shrink-0 transition" data-domain="Standards & Tiers">
+            Standards &amp; Tiers
+          </button>
+          <button onclick="App.filterFacilitiesDomain('Power & Electrical')" class="facilities-filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap flex-shrink-0 transition" data-domain="Power & Electrical">
+            Power &amp; 2N UPS
+          </button>
+          <button onclick="App.filterFacilitiesDomain('Cooling & Thermal')" class="facilities-filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap flex-shrink-0 transition" data-domain="Cooling & Thermal">
+            Thermodynamics &amp; Liquid
+          </button>
+          <button onclick="App.filterFacilitiesDomain('Cabling & Physical Layer')" class="facilities-filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap flex-shrink-0 transition" data-domain="Cabling & Physical Layer">
+            MPO/Fiber Cabling
+          </button>
+          <button onclick="App.filterFacilitiesDomain('Fire Safety & DCIM')" class="facilities-filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap flex-shrink-0 transition" data-domain="Fire Safety & DCIM">
+            VESDA &amp; Clean Agents
+          </button>
+        </div>
+      </div>
+
+      <!-- Facilities Cards Grid -->
+      <div id="facilities-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </section>
+
+    <!-- ================= NETWORK FABRIC & OVERLAYS SECTION ================= -->
+    <section id="network-section" class="space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded text-xs font-bold badge-dc-network">High-Speed Fabric Engineering</span>
+            <span class="text-xs text-slate-400 font-mono">Clos &bull; BGP EVPN &bull; RoCEv2 &bull; SAN</span>
+          </div>
+          <h2 class="text-2xl font-bold text-white mt-1">Data Center Fabric Architectures &amp; Protocols</h2>
+        </div>
+
+        <!-- Domain Filters -->
+        <div class="flex items-center gap-1.5 text-xs overflow-x-auto no-scrollbar touch-scroll pb-1 sm:pb-0 sm:flex-wrap w-full sm:w-auto -mx-1 px-1">
+          <button onclick="App.filterNetworkDomain('all')" class="network-filter-btn px-3 py-1.5 rounded-lg bg-cyan-500 text-slate-950 font-semibold whitespace-nowrap flex-shrink-0 transition" data-domain="all">
+            All
+          </button>
+          <button onclick="App.filterNetworkDomain('Fabric Architecture')" class="network-filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap flex-shrink-0 transition" data-domain="Fabric Architecture">
+            Spine-Leaf &amp; BGP Underlay
+          </button>
+          <button onclick="App.filterNetworkDomain('Overlay & Protocols')" class="network-filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap flex-shrink-0 transition" data-domain="Overlay & Protocols">
+            VXLAN &amp; BGP EVPN
+          </button>
+          <button onclick="App.filterNetworkDomain('AI / HPC Fabrics')" class="network-filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap flex-shrink-0 transition" data-domain="AI / HPC Fabrics">
+            RoCEv2 &amp; GPU Clusters
+          </button>
+          <button onclick="App.filterNetworkDomain('Storage & SAN')" class="network-filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 whitespace-nowrap flex-shrink-0 transition" data-domain="Storage & SAN">
+            Fibre Channel &amp; NVMe-oF
+          </button>
+        </div>
+      </div>
+
+      <!-- Network Cards Grid -->
+      <div id="network-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </section>
+
+    <!-- ================= ABOUT / PORTFOLIO SECTION ================= -->
+    <section id="about-section" class="glass-panel-elevated rounded-2xl p-6 sm:p-10 border border-slate-800 space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+        
+        <div class="md:col-span-1 flex flex-col items-center text-center">
+          <div class="w-28 h-28 rounded-2xl bg-gradient-to-tr from-cyan-500 to-indigo-600 p-1 shadow-xl mb-4">
+            <div class="w-full h-full bg-slate-950 rounded-2xl flex items-center justify-center text-4xl">
+              👨‍💻
+            </div>
+          </div>
+          <h3 class="text-xl font-bold text-white">Abdul-Azeez Sulaimon</h3>
+          <p class="text-xs text-cyan-400 font-medium">Aspiring Data Center &amp; Critical Infrastructure Architect</p>
+          <div class="flex items-center gap-2 mt-3">
+            <span class="text-[11px] px-2.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-800">DCCOR Focus</span>
+            <span class="text-[11px] px-2.5 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-800">Uptime &amp; TIA-942</span>
+          </div>
+        </div>
+
+        <div class="md:col-span-2 space-y-4">
+          <h3 class="text-xl font-bold text-white">About DataCenterCore &amp; The Infrastructure Suite</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Welcome to <strong>DataCenterCore.io</strong>, my comprehensive knowledge base and visual playground for mission-critical physical infrastructure, high-speed fabric design, and certification mastery.
+          </p>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            While my sister platforms focus on Enterprise Routing &amp; Switching (<strong>NetEngineer</strong>), Multi-Cloud Architecture (<strong>CloudArchitect</strong>), and Automation/SRE (<strong>DevOpsMastery</strong>), this hub dives straight into the physical foundation of the internet: multi-megawatt 2N electrical distribution, liquid cooling for 100kW+ GPU clusters, Clos Spine-Leaf topologies, and EVPN VXLAN overlays.
+          </p>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            The built-in <strong>Certification Roadmap</strong> provides a clear path from foundational certifications to expert designations like CCIE Data Center, EPI CDCE, and VMware VCDX.
+          </p>
+
+          <div class="pt-4 border-t border-slate-800 flex flex-wrap items-center gap-3 text-xs">
+            <a href="https://github.com/suaaz" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-medium transition flex items-center gap-2">
+              <span>🐙</span> GitHub Profile
+            </a>
+            <a href="https://suaaz.github.io/CCNA/" target="_blank" class="px-4 py-2 rounded-lg bg-sky-950/70 hover:bg-sky-900 text-sky-300 font-medium border border-sky-800 transition flex items-center gap-1.5">
+              <span>🌐</span> Sister Hub: NetEngineer (CCNA)
+            </a>
+            <a href="https://suaaz.github.io/Cloud/" target="_blank" class="px-4 py-2 rounded-lg bg-purple-950/70 hover:bg-purple-900 text-purple-300 font-medium border border-purple-800 transition flex items-center gap-1.5">
+              <span>☁️</span> Sister Hub: CloudArchitect
+            </a>
+            <a href="https://suaaz.github.io/DevOps/" target="_blank" class="px-4 py-2 rounded-lg bg-blue-950/70 hover:bg-blue-900 text-blue-300 font-medium border border-blue-800 transition flex items-center gap-1.5">
+              <span>🚀</span> Sister Hub: DevOpsMastery
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= TOPIC & CERTIFICATION READER MODAL ================= -->
+  <div id="topic-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div class="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto glass-panel-elevated rounded-2xl border border-slate-700/80 shadow-2xl" id="topic-modal-content">
+      <!-- Dynamically filled by App.openTopicModal or RoadmapEngine.openModal -->
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="w-full glass-panel border-t border-slate-800 py-8 text-center text-xs text-slate-400 mt-16">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 led-active"></span>
+        <span>Hosted live on <strong>GitHub Pages</strong></span>
+      </div>
+      <div>
+        <span>Crafted with ❤️ for Mission-Critical &amp; Data Center Engineers worldwide &bull; Updated Daily</span>
+      </div>
+      <div class="font-mono text-slate-500 text-[11px]">
+        ANSI/TIA-942 &bull; Uptime Tier I-IV &bull; ASHRAE TC 9.9 &bull; RFC 7938 &bull; RFC 7432
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/diagrams.js"></script>
+  <script src="js/roadmap.js"></script>
+  <script src="js/topics-facilities.js"></script>
+  <script src="js/topics-networking.js"></script>
+  <script src="js/interactive-tools.js"></script>
+  <script src="js/daily.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
